@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kundli Matching by Name</title>
+<meta name="description" content="Use our Kundli Matching by Name tool to check name-based marriage compatibility, relationship score and compatibility insights.">
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:30px 15px;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#fff8f4;
+    color:#35241e;
+}
+
+.km-wrapper{
+    max-width:760px;
+    margin:auto;
+}
+
+.km-card{
+    background:#fff;
+    border-radius:22px;
+    box-shadow:0 12px 40px rgba(117,57,28,.12);
+    overflow:hidden;
+    border:1px solid #f1ded2;
+}
+
+.km-header{
+    padding:38px 25px 32px;
+    text-align:center;
+    background:linear-gradient(135deg,#fff0e7,#fffaf5);
+}
+
+.km-icon{
+    width:60px;
+    height:60px;
+    margin:0 auto 13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:linear-gradient(135deg,#c94f35,#e67d43);
+    color:#fff;
+    font-size:28px;
+}
+
+.km-tag{
+    font-size:11px;
+    font-weight:700;
+    color:#b5543d;
+    letter-spacing:1.5px;
+    margin-bottom:8px;
+}
+
+.km-header h1{
+    margin:0;
+    color:#71331f;
+    font-size:34px;
+}
+
+.km-header p{
+    max-width:570px;
+    margin:12px auto 0;
+    color:#76615a;
+    line-height:1.6;
+    font-size:15px;
+}
+
+.km-form{
+    padding:32px;
+}
+
+.km-two{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.km-field label{
+    display:block;
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:8px;
+    color:#4d332a;
+}
+
+.km-field input{
+    width:100%;
+    height:54px;
+    border:1px solid #dfd2cc;
+    border-radius:11px;
+    padding:0 15px;
+    font-size:16px;
+    outline:none;
+    background:#fff;
+}
+
+.km-field input:focus{
+    border-color:#d26343;
+    box-shadow:0 0 0 3px rgba(210,99,67,.10);
+}
+
+.km-button{
+    width:100%;
+    margin-top:24px;
+    border:0;
+    border-radius:12px;
+    padding:17px;
+    background:linear-gradient(135deg,#bd4434,#e17643);
+    color:#fff;
+    font-size:17px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.km-button:hover{
+    opacity:.94;
+}
+
+.km-error{
+    display:none;
+    margin-top:15px;
+    padding:12px;
+    background:#fff0ef;
+    border-radius:8px;
+    color:#b42318;
+    text-align:center;
+    font-size:14px;
+}
+
+.km-result{
+    display:none;
+    margin:0 32px 32px;
+    padding:30px;
+    border-radius:18px;
+    border:1px solid #f0d9ce;
+    background:linear-gradient(145deg,#fff9f6,#fff);
+    text-align:center;
+}
+
+.km-small{
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1.5px;
+    color:#ad6854;
+}
+
+.km-couple{
+    font-size:25px;
+    color:#743a29;
+    font-weight:700;
+    margin:10px 0 20px;
+}
+
+.km-score-circle{
+    width:145px;
+    height:145px;
+    margin:auto;
+    border-radius:50%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:conic-gradient(#d65f3e 0deg,#f2dfd7 0deg);
+    position:relative;
+}
+
+.km-score-circle:before{
+    content:"";
+    position:absolute;
+    width:117px;
+    height:117px;
+    border-radius:50%;
+    background:#fff;
+}
+
+.km-score{
+    position:relative;
+    z-index:2;
+    font-size:34px;
+    color:#b94732;
+    font-weight:800;
+}
+
+.km-outof{
+    position:relative;
+    z-index:2;
+    font-size:12px;
+    color:#8b7770;
+}
+
+.km-rating{
+    font-size:21px;
+    font-weight:700;
+    color:#65372a;
+    margin:17px 0 5px;
+}
+
+.km-percent{
+    color:#9a6454;
+    font-size:14px;
+}
+
+.km-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:25px;
+}
+
+.km-box{
+    background:#fff;
+    border:1px solid #f0e2db;
+    border-radius:12px;
+    padding:16px;
+    text-align:left;
+}
+
+.km-box span{
+    display:block;
+    color:#88736c;
+    font-size:12px;
+    margin-bottom:7px;
+}
+
+.km-box strong{
+    color:#6f3929;
+    font-size:18px;
+}
+
+.km-bar{
+    width:100%;
+    height:7px;
+    background:#f2e5df;
+    border-radius:10px;
+    margin-top:9px;
+    overflow:hidden;
+}
+
+.km-fill{
+    height:100%;
+    background:linear-gradient(90deg,#c74c37,#e57a44);
+    border-radius:10px;
+}
+
+.km-analysis{
+    margin-top:22px;
+    text-align:left;
+    background:#fff;
+    border:1px solid #f0e2dc;
+    border-radius:12px;
+    padding:20px;
+}
+
+.km-analysis h3{
+    margin:0 0 9px;
+    color:#753d2c;
+    font-size:18px;
+}
+
+.km-analysis p{
+    margin:0;
+    color:#6f625d;
+    line-height:1.7;
+    font-size:14px;
+}
+
+.km-reset{
+    margin-top:22px;
+    padding:11px 20px;
+    border-radius:9px;
+    border:1px solid #c9563b;
+    background:#fff;
+    color:#b64832;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.km-note{
+    margin:0 32px 32px;
+    padding:15px;
+    border-radius:10px;
+    background:#fff9e9;
+    border:1px solid #f0e1b7;
+    color:#675a38;
+    font-size:12px;
+    line-height:1.6;
+}
+
+@media(max-width:600px){
+
+    body{
+        padding:15px 10px;
+    }
+
+    .km-header h1{
+        font-size:27px;
+    }
+
+    .km-form{
+        padding:23px 17px;
+    }
+
+    .km-two{
+        grid-template-columns:1fr;
+    }
+
+    .km-result{
+        margin:0 17px 22px;
+        padding:25px 15px;
+    }
+
+    .km-grid{
+        grid-template-columns:1fr;
+    }
+
+    .km-note{
+        margin:0 17px 22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="km-wrapper">
+
+<div class="km-card">
+
+    <div class="km-header">
+
+        <div class="km-icon">♡</div>
+
+        <div class="km-tag">
+            NAME COMPATIBILITY TOOL
+        </div>
+
+        <h1>Kundli Matching by Name</h1>
+
+        <p>
+            Enter the boy's and girl's names to check their
+            name-based marriage and relationship compatibility.
+        </p>
+
+    </div>
+
+
+    <div class="km-form">
+
+        <div class="km-two">
+
+            <div class="km-field">
+
+                <label for="boyName">
+                    Boy's Name
+                </label>
+
+                <input
+                    type="text"
+                    id="boyName"
+                    placeholder="Enter boy's name"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="km-field">
+
+                <label for="girlName">
+                    Girl's Name
+                </label>
+
+                <input
+                    type="text"
+                    id="girlName"
+                    placeholder="Enter girl's name"
+                    autocomplete="off"
+                >
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="km-button"
+            onclick="matchKundli()"
+        >
+            ♡ Match Kundli
+        </button>
+
+
+        <div
+            id="kmError"
+            class="km-error"
+        ></div>
+
+    </div>
+
+
+    <div
+        id="kmResult"
+        class="km-result"
+    >
+
+        <div class="km-small">
+            COMPATIBILITY RESULT
+        </div>
+
+        <div
+            id="coupleNames"
+            class="km-couple"
+        ></div>
+
+
+        <div
+            id="scoreCircle"
+            class="km-score-circle"
+        >
+
+            <div
+                id="gunaScore"
+                class="km-score"
+            >
+                0
+            </div>
+
+            <div class="km-outof">
+                out of 36
+            </div>
+
+        </div>
+
+
+        <div
+            id="rating"
+            class="km-rating"
+        ></div>
+
+        <div
+            id="percentage"
+            class="km-percent"
+        ></div>
+
+
+        <div class="km-grid">
+
+            <div class="km-box">
+
+                <span>
+                    Love Compatibility
+                </span>
+
+                <strong id="loveScore"></strong>
+
+                <div class="km-bar">
+                    <div
+                        id="loveBar"
+                        class="km-fill"
+                    ></div>
+                </div>
+
+            </div>
+
+
+            <div class="km-box">
+
+                <span>
+                    Communication
+                </span>
+
+                <strong id="communicationScore"></strong>
+
+                <div class="km-bar">
+                    <div
+                        id="communicationBar"
+                        class="km-fill"
+                    ></div>
+                </div>
+
+            </div>
+
+
+            <div class="km-box">
+
+                <span>
+                    Emotional Bond
+                </span>
+
+                <strong id="emotionalScore"></strong>
+
+                <div class="km-bar">
+                    <div
+                        id="emotionalBar"
+                        class="km-fill"
+                    ></div>
+                </div>
+
+            </div>
+
+
+            <div class="km-box">
+
+                <span>
+                    Marriage Compatibility
+                </span>
+
+                <strong id="marriageScore"></strong>
+
+                <div class="km-bar">
+                    <div
+                        id="marriageBar"
+                        class="km-fill"
+                    ></div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="km-analysis">
+
+            <h3>
+                ♡ Compatibility Analysis
+            </h3>
+
+            <p id="analysisText"></p>
+
+        </div>
+
+
+        <button
+            class="km-reset"
+            type="button"
+            onclick="resetKundli()"
+        >
+            Check Another Match
+        </button>
+
+    </div>
+
+
+    <div class="km-note">
+
+        <strong>Important:</strong>
+
+        This tool provides a name-based compatibility estimate
+        for informational and entertainment purposes. Traditional
+        Vedic Kundli or Ashtakoota matching requires birth date,
+        exact birth time and birthplace to calculate Moon sign,
+        Nakshatra and the eight Kootas. Therefore, the score shown
+        here should not be treated as an actual 36-Guna birth-chart
+        matching result.
+
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+function cleanName(name){
+
+    return name
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"")
+        .replace(/[^a-z]/g,"");
+
+}
+
+
+function hashName(text){
+
+    let hash = 2166136261;
+
+    for(let i=0;i<text.length;i++){
+
+        hash ^= text.charCodeAt(i);
+
+        hash = Math.imul(
+            hash,
+            16777619
+        );
+
+    }
+
+    return hash >>> 0;
+
+}
+
+
+function seededValue(seed,min,max){
+
+    const x =
+        Math.sin(seed) * 10000;
+
+    const decimal =
+        x - Math.floor(x);
+
+    return Math.floor(
+        min +
+        decimal *
+        (max-min+1)
+    );
+
+}
+
+
+function matchKundli(){
+
+    const boyInput =
+        document.getElementById("boyName");
+
+    const girlInput =
+        document.getElementById("girlName");
+
+    const error =
+        document.getElementById("kmError");
+
+    const result =
+        document.getElementById("kmResult");
+
+
+    error.style.display="none";
+    result.style.display="none";
+
+
+    const boy =
+        boyInput.value.trim();
+
+    const girl =
+        girlInput.value.trim();
+
+
+    if(!boy || !girl){
+
+        error.innerHTML =
+            "Please enter both names.";
+
+        error.style.display="block";
+
+        return;
+
+    }
+
+
+    const cleanBoy =
+        cleanName(boy);
+
+    const cleanGirl =
+        cleanName(girl);
+
+
+    if(
+        cleanBoy.length < 2 ||
+        cleanGirl.length < 2
+    ){
+
+        error.innerHTML =
+            "Please enter valid names.";
+
+        error.style.display="block";
+
+        return;
+
+    }
+
+
+    /*
+       Sort names so:
+
+       Rahul + Priya
+
+       and
+
+       Priya + Rahul
+
+       produce the same compatibility.
+    */
+
+    const pair =
+        [cleanBoy,cleanGirl]
+        .sort()
+        .join("|");
+
+
+    const seed =
+        hashName(pair);
+
+
+    /*
+       Name-based entertainment estimate.
+
+       Same pair always receives
+       the same results.
+    */
+
+    const love =
+        seededValue(seed + 11,48,96);
+
+    const communication =
+        seededValue(seed + 29,45,95);
+
+    const emotional =
+        seededValue(seed + 47,46,97);
+
+    const marriage =
+        seededValue(seed + 71,48,96);
+
+
+    const average =
+        Math.round(
+            (
+                love +
+                communication +
+                emotional +
+                marriage
+            ) / 4
+        );
+
+
+    /*
+       Convert overall percentage
+       to a display score out of 36.
+
+       IMPORTANT:
+       This is NOT traditional
+       Ashtakoota Guna calculation.
+    */
+
+    const guna =
+        Math.round(
+            average * 36 / 100
+        );
+
+
+    let rating;
+    let analysis;
+
+
+    if(average >= 85){
+
+        rating =
+            "Excellent Compatibility";
+
+        analysis =
+            "The names show a very strong compatibility pattern in this name-based estimate. The relationship may reflect good emotional understanding, communication and mutual support. Maintaining trust, patience and honest communication can further strengthen the bond.";
+
+    }
+
+    else if(average >= 72){
+
+        rating =
+            "Very Good Compatibility";
+
+        analysis =
+            "This name-based compatibility estimate suggests a positive relationship potential. Both partners may find it relatively easy to understand and support each other, although healthy communication and mutual respect remain important.";
+
+    }
+
+    else if(average >= 60){
+
+        rating =
+            "Good Compatibility";
+
+        analysis =
+            "The compatibility appears balanced. There may be several areas of natural connection along with some differences. Understanding each other's expectations and communicating openly can help create a stronger relationship.";
+
+    }
+
+    else{
+
+        rating =
+            "Moderate Compatibility";
+
+        analysis =
+            "This estimate suggests that the relationship may require additional understanding and communication. A compatibility score alone cannot determine the success of a relationship, and real-life values, trust and mutual respect are much more important.";
+
+    }
+
+
+    document.getElementById(
+        "coupleNames"
+    ).textContent =
+        boy + " ♡ " + girl;
+
+
+    document.getElementById(
+        "gunaScore"
+    ).textContent =
+        guna;
+
+
+    document.getElementById(
+        "rating"
+    ).textContent =
+        rating;
+
+
+    document.getElementById(
+        "percentage"
+    ).textContent =
+        average + "% Overall Compatibility";
+
+
+    document.getElementById(
+        "loveScore"
+    ).textContent =
+        love + "%";
+
+
+    document.getElementById(
+        "communicationScore"
+    ).textContent =
+        communication + "%";
+
+
+    document.getElementById(
+        "emotionalScore"
+    ).textContent =
+        emotional + "%";
+
+
+    document.getElementById(
+        "marriageScore"
+    ).textContent =
+        marriage + "%";
+
+
+    document.getElementById(
+        "loveBar"
+    ).style.width =
+        love + "%";
+
+
+    document.getElementById(
+        "communicationBar"
+    ).style.width =
+        communication + "%";
+
+
+    document.getElementById(
+        "emotionalBar"
+    ).style.width =
+        emotional + "%";
+
+
+    document.getElementById(
+        "marriageBar"
+    ).style.width =
+        marriage + "%";
+
+
+    document.getElementById(
+        "analysisText"
+    ).textContent =
+        analysis;
+
+
+    const circle =
+        document.getElementById(
+            "scoreCircle"
+        );
+
+
+    const angle =
+        average * 3.6;
+
+
+    circle.style.background =
+        "conic-gradient(" +
+        "#d65f3e " +
+        angle +
+        "deg," +
+        "#f2dfd7 " +
+        angle +
+        "deg)";
+
+
+    result.style.display="block";
+
+
+    setTimeout(function(){
+
+        result.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
+    },100);
+
+}
+
+
+function resetKundli(){
+
+    document.getElementById(
+        "boyName"
+    ).value="";
+
+    document.getElementById(
+        "girlName"
+    ).value="";
+
+    document.getElementById(
+        "kmResult"
+    ).style.display="none";
+
+    document.getElementById(
+        "kmError"
+    ).style.display="none";
+
+    document.getElementById(
+        "boyName"
+    ).focus();
+
+}
+
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            const active =
+                document.activeElement;
+
+            if(
+                active.id === "boyName" ||
+                active.id === "girlName"
+            ){
+
+                matchKundli();
+
+            }
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
